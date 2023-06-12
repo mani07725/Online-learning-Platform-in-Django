@@ -188,6 +188,13 @@ def create_course(request):
         except Trainer.DoesNotExist:
             return redirect('create')
 
+        # Check if a course with the same title already exists
+        existing_course = Course.objects.filter(title=title).first()
+        if existing_course:
+            # Check if the same trainer already created the existing course
+            if existing_course.Trinerid == trainer:
+                return redirect('create')
+        
         # Create the course object
         course = Course(
             title=title,
@@ -203,7 +210,6 @@ def create_course(request):
         return redirect('courses')
 
     return render(request, 'learning/create.html', {'trainers': trainers})
-
 
 def course_detail(request, course_id):
     if request.method == 'POST':
