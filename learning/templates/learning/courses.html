@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  
+  <title>ILearnHub</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  {% load static %}
+  <!-- Favicons -->
+  <link rel="stylesheet" href="{% static '/new.css' %}">
+  <link href="{% static 'img/logo.png' %}" rel="icon">
+  <link href="{% static 'img/logo.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+ 
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/animate.css/animate.min.css'%}" rel="stylesheet">
+  <link href="{% static  'vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static  'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <style>
+    .course-image-container {
+      width: 100%;
+      height: 250px;
+      overflow: hidden;
+    }
+    
+    .course-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center">
+
+      <h1 class="logo me-auto"><a href="/">ILearnHub</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo me-auto"><img src="{% static 'img/logo.png' %}" alt="" class="img-fluid"></a> -->
+
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li><a  href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a class="active" href="/courses">Courses</a></li>
+          <li><a  href="/create">create</a></li>
+          <li><a href="/trainers">Trainers</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/contact">Contact</a></li>
+          
+
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+      <a href="/courses" class="get-started-btn">Get Started</a>
+      <div class="mx-2">
+        <button type="button" class="btn btn-outline-secondary" id="userlogin" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+        <button type="button" class="btn btn-outline-secondary" id="usersignup" data-bs-toggle="modal" data-bs-target="#signupModal">Signup</button>
+      </div>
+      <div class="mx-2">
+        <div id="loggedinuser" class="dropdown" style="display: none;">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="loggedInUser" data-bs-toggle="dropdown" aria-expanded="false">
+            LoggedInUser
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" id="UserName" name="UserName" href="#">
+              <!-- Display the value of 'new' here -->
+            </a></li>
+            <li><a class="dropdown-item" href="#" id="logout">Logout</a></li>
+          </ul>
+        </div>
+        
+    </div>
+</div>
+  </header><!-- End Header -->
+
+  <main id="main" data-aos="fade-in">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+      <div class="container">
+        <h2>Courses</h2>
+        <p>Choose from a wide variety of courses carefully curated for your needs </p>
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+    <!-- ======= Courses Section ======= -->
+    <section id="courses" class="courses">
+      <div class="container" data-aos="fade-up">
+        <div class="row" data-aos="zoom-in" data-aos-delay="100">
+          {% for course in courses %}
+          <div class="col-lg-4 col-md-6">
+            <div class="course-item">
+              <div class="course-image-container">
+                {% if course.image %}
+                <img src="{{ course.image.url }}" class="img-fluid" alt="Course Image">
+                {% else %}
+                <img src="{% static 'img/about.jpg' %}" class="img-fluid" alt="Default Image">
+                {% endif %}
+              </div>
+              <div class="course-content">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h4>{{ course.Type }}</h4>
+                </div>
+                <h3><a href="{% url 'course-detail' course.CourseID %}">{{ course.title }}</a></h3>
+                <p>{{ course.description }}</p>
+                <div class="trainer d-flex justify-content-between align-items-center">
+                  <div class="trainer-profile d-flex align-items-center">
+                    {% if course.Trinerid.trainerinfo_set.first %}
+                    <img src="{{ course.Trinerid.trainerinfo_set.first.image.url }}" class="img-fluid" alt="Trainer Image">
+                    {% endif %}
+                    <span>{{ course.Trinerid.name }}</span>
+                  </div>
+                  <div class="trainer-rank d-flex align-items-center">
+                    <i class="bx bx-user"></i>&nbsp;{{ course.Enrollment }}
+                    &nbsp;&nbsp;
+                    <i class="bx bx-heart"></i>&nbsp;{{ course.Trinerid.likes }}
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <p class="price">${{ course.price }}</p>
+                  <div class="enroll-button d-flex justify-content-between">
+                    <button class="btn btn-primary login-button" data-toggle="modal" data-target="#loginModal" data-course-id="{{ course.CourseID }}" data-url="{% url 'enroll' course.CourseID %}">Enroll</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End Course Item-->
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+<script>
+$('.login-button').click(function() {
+  // Retrieve the data attributes
+  var courseId = $(this).data('course-id');
+  var enrollUrl = $(this).data('url');
+
+  // Check if the user is logged in
+  if (userAuthenticated) {
+    // User is logged in, redirect to enroll page
+    window.location.href = enrollUrl;
+  } else {
+    // User is not logged in, display the login modal
+    $('#loginModal').modal('show');
+    
+    // Attach a click event listener to the login modal's login button
+    $('#loginModal .login-submit').click(function() {
+      // Perform the login logic here
+      // Once the login is successful, redirect to enroll page
+      window.location.href = enrollUrl;
+    });
+  }
+});
+
+</script>
+  </main><!-- End #main -->
+  
+    <!-- Your page content here -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">Login to ILearnHub</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="loginForm">
+              {% csrf_token %}
+              <input type="hidden" name="loginForm" value="true">
+              <div class="mb-3">
+                  <label for="userType" class="form-label">Are you a student or a trainer?</label>
+                  <select class="form-select" id="userType" required name="userType">
+                      <option value="student" selected>Student</option>
+                      <option value="trainer">Trainer</option>
+                  </select>
+              </div>
+              <div class="col-12">
+                  <label for="username" class="form-label">Username</label>
+                  <div class="input-group has-validation">
+                      <input type="text" class="form-control" id="username" name="username" placeholder="Username" required="">
+                      <div id="usernameError" class="invalid-feedback"></div>
+                  </div>
+              </div>
+              <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="password" name="password">
+                  <div id="passwordError" class="invalid-feedback"></div>
+              </div>
+              <div class="mb-3 form-check">
+                  <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                  <label class="form-check-label" for="exampleCheck1">Remember password?</label>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button id="loginButton" type="button" class="btn btn-primary">Login</button>
+              </div>
+          </form>
+          </div>
+    
+        </div>
+      </div>
+    </div>
+    <!-- Login Modal -->
+ 
+    <!-- Your page content here -->
+    
+    <!-- sign up Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="signupModalLabel">signup to ILearnHub</h5> </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form  action="{% url 'courses' %}" method="POST">
+              <input type="hidden" name="signupForm" value="true">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="userType" class="form-label">Are you a student or a trainer?</label>
+                <select class="form-select" id="userType" required name="userType">
+                  <option value="student" selected>Student</option>
+                  <option value="trainer">Trainer</option>
+                </select>
+              </div>
+              <div class="row g-3">
+    
+                <div class="col-12">
+                  <label for="name" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="Name" name="Name" placeholder="enter your name" required="">
+                  <div class="invalid-feedback">
+                    Valid  name is required.
+                  </div>
+                </div>
+    
+                <div class="col-12">
+                  <label for="username" class="form-label">Username</label>
+                  <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required="">
+                  <div class="invalid-feedback">
+                      Your username is required.
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-1">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="Password" name="Password" >
+                </div>
+                <div class="col-12">
+                  <label for="contact" class="form-label">contact No.</label>
+                  <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="contact" name="contact" placeholder="Contact number" required="">
+                  <div class="invalid-feedback">
+                      contact number is required.
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="col-12">
+                  <label for="email" class="form-label">Email <span class="text-muted">(compulsory)</span></label>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
+                  <div class="invalid-feedback">
+                    Please enter a valid email address for shipping updates.
+                  </div>
+                </div>
+              </div>
+              <div class="form-check  my-4">
+                <input type="checkbox" class="form-check-input" id="save-info">
+                <label class="form-check-label" for="save-info">Save this information for next time</label>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Sign up</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+        </div>
+      </div>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+        $(document).ready(function () {
+          // Check if the user is logged in when the page loads
+          checkLoggedInUser();
+      
+          // Handle login form submission
+          $("#loginButton").click(function () {
+            var formData = $("#loginForm").serialize();
+            $.ajax({
+              type: "POST",
+              url: "{% url 'courses' %}",
+              data: formData,
+              success: function (response) {
+                console.log(response); // Debug statement
+                if (response.login_status === "success") {
+                  $("#userlogin").hide();
+                  $("#loginModal").modal("hide");
+                  $("#loggedinuser").show();
+                  $("#UserName").html(response.username); // Set the content of 'UserName' element
+      
+                  // Store the login state in session storage
+                  sessionStorage.setItem("loggedIn", "true");
+                  sessionStorage.setItem("loggedInUser", response.username);
+      
+                  // Check if enroll button was clicked
+                } else if (response.login_status === "wrong_password") {
+                  $("#passwordError").text("Incorrect password").show();
+                  $("#usernameError").hide();
+                } else if (response.login_status === "not_registered") {
+                  $("#usernameError").text("User not registered").show();
+                  $("#passwordError").hide();
+                }
+              },
+            });
+          });
+      
+          $(".enroll-button").on("click", ".btn-primary", function () {
+            // Check if the user is logged in
+            var isLoggedIn = sessionStorage.getItem("loggedIn");
+            if (!isLoggedIn) {
+              // User is not logged in, show an error message or perform any other necessary action
+              alert("Please log in to enroll in the course.");
+              return;
+            }
+      
+            // Get the course ID from the data attribute
+            var courseId = $(this).data("course-id");
+      
+            // Make an AJAX request to enroll the user in the course
+            $.ajax({
+              type: "POST",
+              url: "{% url 'enroll' course_id=0 %}".replace("0", courseId),
+              data: {
+                course_id: courseId, // Pass the course_id as data
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+              },
+              success: function (response) {
+                // Handle the enrollment success or failure
+                if (response.enrollment_status === "success") {
+                  // Enrollment was successful, perform any necessary actions
+                  // Redirect the user to the course details page
+                  window.location.href = "{% url 'enroll' course_id=0 %}".replace('0', courseId);
+                } else {
+                  // Handle enrollment failure
+                  window.location.href = "{% url 'pricing' course_id=0 %}".replace('0', courseId);
+                }
+              },
+            });
+          });
+          // Handle logout click  
+          $("#logout").click(function (e) {
+            e.preventDefault();
+            // Clear the login state from session storage
+            sessionStorage.removeItem("loggedIn");
+            sessionStorage.removeItem("loggedInUser");
+            // Refresh the page
+            location.reload();
+          });
+      
+          // Function to check if the user is logged in
+          function checkLoggedInUser() {
+            var isLoggedIn = sessionStorage.getItem("loggedIn");
+            if (isLoggedIn) {
+              $("#userlogin").hide();
+              $("#loggedinuser").show();
+              var loggedInUser = sessionStorage.getItem("loggedInUser");
+              $("#userName").html(loggedInUser);
+            } else {
+              $("#userlogin").show();
+              $("#loggedinuser").hide();
+            }
+          }
+        });
+      </script>
+      
+      
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h3>I LEARN HUB</h3>
+            <p>
+              DCSE, UET Peshawar <br>
+              Peshawar, 25000<br>
+              Pakistan <br><br>
+              <strong>Phone:</strong> +92 000 0000000<br>
+              <strong>Email:</strong> info@ilh.com<br>
+            </p>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="/">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="/about">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="/courses">Services</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="/courses">Trainers</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="/contact">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-newsletter">
+            <h4>Join Our Newsletter</h4>
+            <p>Stay updated about the latest courses and learning materials</p>
+            <form action="" method="post">
+              <input type="email" name="email"><input type="submit" value="Subscribe">
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container d-md-flex py-4">
+
+      <div class="me-md-auto text-center text-md-start">
+        <div class="copyright">
+          &copy; Copyright <strong><span>ILH</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/mentor-free-education-bootstrap-theme/ -->
+          Designed by <a">Ebtihaj & Usman</a>
+        </div>
+      </div>
+      <div class="social-links text-center text-md-right pt-3 pt-md-0">
+        <a href="https://twitter.com/ibtijinn" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="https://www.facebook.com/ibtihaj.abdullah.1/" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="https://www.instagram.com/ibtihaj.abdullah/" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/ebtihaj-abdullah-37967520b/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>
